@@ -48,6 +48,10 @@ export const Store = ({ page, notFound }) => {
 
     }
 
+    let total_quantity = 0;
+    for (let i = 0 ; i<cart.length; i++){
+        total_quantity+= cart[i].quantity;
+    }
     return (
         <>
             <div title="Store">
@@ -63,7 +67,7 @@ export const Store = ({ page, notFound }) => {
                     <Link className="header-child" to="/membership" onClick={handleMembershipIcon}>Membership</Link>
                     <Link className="header-child">Sales</Link>
                     <Link className="header-child">Contact Us</Link>
-                    <Link className="header-child" to="/cart" onClick={handleCartIcon}><img className="header-icon" src="/cart.png" /> Cart ({cart ? cart.length : 0})</Link>
+                    <Link className="header-child" to="/cart" onClick={handleCartIcon}><img className="header-icon" src="/cart.png" /> Cart ({total_quantity})</Link>
                 </header>
             </div>
             <div>

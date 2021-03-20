@@ -42,7 +42,7 @@ export const MembershipContainer = () => {
             <header className="header">
                 <div className="text-center">
                     <span className="h2 col-sm-3 font-weight-normal grade" onClick={() => handleGradeClick()}>ALL</span>
-                    <span className="h2 col-sm-3 font-weight-normal grade" onClick={() => handleGradeClick("SILvER")}>Sliver</span>
+                    <span className="h2 col-sm-3 font-weight-normal grade" onClick={() => handleGradeClick("SILvER")}>Silver</span>
                     <span className="h2 col-sm-3 font-weight-normal grade" onClick={() => handleGradeClick("GoLD")}>Gold</span>
                     <span className="h2 col-sm-3 font-weight-normal grade" onClick={() => handleGradeClick("DIAmOND")}>Diamond</span>
                 </div>
