@@ -22,7 +22,7 @@ app.get('/', function (req, res) {
 
 // Get product info API
 app.get('/product', function (req, res) {
-  db.all("SELECT * FROM product", (err, rows) => {
+  db.all("SELECT * FROM product WHERE obsoleted ='N'", (err, rows) => {
     if (err) {
       res.status(400).json({ "error": err.message });
       return;
@@ -33,17 +33,24 @@ app.get('/product', function (req, res) {
 
 
 //Get membership info 
-// app.get('/membership', function (req, res) {
-//   let sql = `SELECT * FROM membership`;
-//   db.all(sql, (err, rows) => {
-//     if (err) {
-//       res.status(400).json({ "error": err.message });
-//       return;
-//     }
-//     res.status(200).json({ "data": rows });
-//   })
+ app.get('/membership', function (req, res) {
+   let sql = `SELECT * FROM membership`;
+   membership = req.originalUrl;
+   if(membership!="/membership"){
+      membership = membership.split('?');
+      dummy = membership[1].split("=");
+      console.log(dummy)
+      sql = sql + " WHERE " + dummy[0] + '="' + dummy[1].toUpperCase() + '"' 
+      console.log(sql);}
+   db.all(sql, (err, rows) => {
+     if (err) {
+       res.status(400).json({ "error": err.message });
+       return;
+     }
+     res.status(200).json({ "data": rows });
+   })
 
-// })
+ })
 
 
 // Add product to cart API with query params productId
@@ -59,7 +66,7 @@ app.post('/cart', function (req, res) {
       res.status(400).json({ "error": err.message });
       return;
     }
-    db.all(`SELECT p.id,p.name,p.price FROM cart_item ct INNER JOIN product p on ct.product_id = p.id`, (err, rows) => {
+    db.all(`SELECT p.id as id,p.name as name,SUM(p.price) as price ,COUNT(p.id) as quantity FROM cart_item ct, product p WHERE ct.product_id = p.id GROUP BY p.id`, (err, rows) => {
       res.status(201).json({ "data": rows });
     })
 
@@ -69,8 +76,8 @@ app.post('/cart', function (req, res) {
 
 // Get cart's product
 app.get('/cart', function (req, res) {
-  db.all(`SELECT p.id,p.name,p.price FROM cart_item ct INNER JOIN product p on ct.product_id = p.id`, (err, rows) => {
-
+  //db.all(`SELECT p.id,p.name,p.price FROM cart_item ct INNER JOIN product p on ct.product_id = p.id`, (err, rows) => {
+  db.all(`SELECT p.id as id,p.name as name,SUM(p.price) as price ,COUNT(p.id) as quantity FROM cart_item ct, product p WHERE ct.product_id = p.id GROUP BY p.id`, (err, rows) => {
     const result = deduplicate(rows);
 
     if (err) {
@@ -78,6 +85,7 @@ app.get('/cart', function (req, res) {
       return;
     }
     res.status(200).json({ "data": result });
+    console.log(result);
   })
 })
 
@@ -90,7 +98,7 @@ app.delete('/cart', function (req, res) {
     }
   })
 
-  db.all(`SELECT p.id,p.name,p.price FROM cart_item ct INNER JOIN product p on ct.product_id = p.id`, (err, rows) => {
+  db.all(`SELECT p.id as id,p.name as name,SUM(p.price) as price ,COUNT(p.id) as quantity FROM cart_item ct, product p WHERE ct.product_id = p.id GROUP BY p.id`, (err, rows) => {
     res.status(201).json({ "data": rows });
   })
 

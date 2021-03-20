@@ -10,6 +10,12 @@ export const CartContainer = ({cart}) => {
         })
     }
 
+    let total_quantity = 0;
+    let total_price = 0;
+    for (let i = 0 ; i<cart.length; i++){
+        total_quantity+= cart[i].quantity;
+        total_price += cart[i].price * cart[i].quantity;
+    }
     return (
         <div>
             { typeof cart === 'undefined' || cart.length === 0 ?
@@ -27,9 +33,9 @@ export const CartContainer = ({cart}) => {
                     <div className="col-sm-2">
                         <div className="card card-body">
                             <p className="mb-1">Total Items</p>
-                            <h4 className=" mb-3 txt-right">{cart.length}</h4>
+                            <h4 className=" mb-3 txt-right">{total_quantity}</h4>
                             <p className="mb-1">Total Payment</p>
-                            <h3 className="m-0 txt-right">{cart.map(e=>e.price).reduce((a, b) => a + b)}</h3>
+                            <h3 className="m-0 txt-right">{total_price}</h3>
                             <hr className="my-4" />
                             <div className="text-center">
                                 <button type="button" className="btn btn-primary mb-2 btn-dark" >CHECKOUT</button>
