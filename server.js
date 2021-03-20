@@ -39,9 +39,9 @@ app.get('/product', function (req, res) {
    if(membership!="/membership"){
       membership = membership.split('?');
       dummy = membership[1].split("=");
-      console.log(dummy)
+      
       sql = sql + " WHERE " + dummy[0] + '="' + dummy[1].toUpperCase() + '"' 
-      console.log(sql);}
+      }
    db.all(sql, (err, rows) => {
      if (err) {
        res.status(400).json({ "error": err.message });
@@ -85,7 +85,6 @@ app.get('/cart', function (req, res) {
       return;
     }
     res.status(200).json({ "data": result });
-    console.log(result);
   })
 })
 
